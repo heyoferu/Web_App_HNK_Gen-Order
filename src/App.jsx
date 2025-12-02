@@ -49,7 +49,13 @@ const formatCurrency = (amount) => {
   return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(amount);
 };
 
-const getImagePath = (sku) => `/assets/products/${sku}.png`;
+// Load product images at build time so Vite includes them in the bundle
+const images = import.meta.glob('../assets/products/*.png', { eager: true, as: 'url' });
+
+const getImagePath = (sku) => {
+  const key = `../assets/products/${sku}.png`;
+  return images[key] || `/assets/products/${sku}.png`;
+};
 
 /**
  * COMPONENTS
