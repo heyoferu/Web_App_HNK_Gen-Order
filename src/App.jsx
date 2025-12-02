@@ -147,13 +147,13 @@ const ProductCard = ({ product, cartQuantity, onUpdateCart }) => {
 // Hidden printable receipt component
 const PrintableReceipt = ({ img, cart, subtotal, depositTotal, total, refProp, chargeDeposit, showPrices }) => {
   return (
-    <div ref={refProp} className="hidden print:block bg-white p-8 max-w-auto mx-auto" id="printable-area">
-      <div className="border-b-2 border-green-600 pb-4 mb-6 flex justify-between items-center">
+    <div ref={refProp} className="hidden print:block bg-white p-10 max-w-auto mx-auto" id="printable-area">
+      <div className="border-b-4 border-green-600 pb-6 mb-8 flex justify-between items-center">
         <div>
-           <h1 className="text-3xl font-bold text-gray-900">
+           <h1 className="text-4xl font-extrabold text-gray-900 leading-tight">
              {showPrices ? "PEDIDO" : "LISTA"}
            </h1>
-           <p className="text-gray-500">Heineken México</p>
+           <p className="text-gray-500 mt-1">Heineken México</p>
         </div>
         <div className="text-right">
           <p className="text-sm text-gray-400">Fecha</p>
@@ -161,28 +161,30 @@ const PrintableReceipt = ({ img, cart, subtotal, depositTotal, total, refProp, c
         </div>
       </div>
 
-      <table className="w-full mb-8">
+      <table className="w-full mb-8 table-auto">
         <thead>
           <tr className="border-b border-gray-200 text-left text-sm text-gray-500 uppercase tracking-wider">
-            <th className='py-2'>Imagen</th>
-            <th className="py-2">Producto</th>
-            <th className="py-2 text-center">Cant.</th>
-            {showPrices && <th className="py-2 text-right">Precio</th>}
-            {showPrices && <th className="py-2 text-right">Total</th>}
+            <th className='py-3 px-3 w-20'>Imagen</th>
+            <th className="py-3 px-3">Producto</th>
+            <th className="py-3 px-3 text-center w-20">Cant.</th>
+            {showPrices && <th className="py-3 px-3 text-right w-28">Precio</th>}
+            {showPrices && <th className="py-3 px-3 text-right w-28">Total</th>}
           </tr>
         </thead>
         <tbody>
           {Object.values(cart).map(({ product, quantity }) => (
-            <tr key={product.sku} className="border-b border-gray-100 text-sm">
-              <td><img src={getImagePath(product.sku)} alt={product.name} className="max-w-12 max-h-12 object-cover rounded" onError={(e) => { e.target.style.display='none'; }} /></td>
-              <td className="py-3">
-                <span className="font-bold text-gray-800">{product.name}</span>
+            <tr key={product.sku} className="border-b border-gray-100 text-sm align-top">
+              <td className="py-3 px-3">
+                <img src={getImagePath(product.sku)} alt={product.name} className="w-20 h-20 object-contain rounded" onError={(e) => { e.target.style.display='none'; }} />
+              </td>
+              <td className="py-3 px-3 align-middle">
+                <span className="font-semibold text-gray-800 text-lg leading-snug">{product.name}</span>
                 <br/>
                 <span className="text-xs text-gray-500">SKU: {product.sku}</span>
               </td>
-              <td className="py-3 text-center font-medium text-lg">{quantity}</td>
-              {showPrices && <td className="py-3 text-right text-gray-600">{formatCurrency(product.price)}</td>}
-              {showPrices && <td className="py-3 text-right font-bold text-gray-900">{formatCurrency(product.price * quantity)}</td>}
+              <td className="py-3 px-3 text-center font-medium text-lg align-middle">{quantity}</td>
+              {showPrices && <td className="py-3 px-3 text-right text-gray-600 align-middle">{formatCurrency(product.price)}</td>}
+              {showPrices && <td className="py-3 px-3 text-right font-bold text-gray-900 align-middle">{formatCurrency(product.price * quantity)}</td>}
             </tr>
           ))}
         </tbody>
@@ -190,9 +192,9 @@ const PrintableReceipt = ({ img, cart, subtotal, depositTotal, total, refProp, c
 
       {showPrices && (
         <div className="flex justify-end">
-          <div className="w-1/2 space-y-2">
+          <div className="w-1/3 space-y-3">
             <div className="flex justify-between text-gray-600">
-              <span>Subtotal:</span>
+              <span className="pr-4">Subtotal:</span>
               <span>{formatCurrency(subtotal)}</span>
             </div>
             {depositTotal > 0 && chargeDeposit && (
@@ -207,7 +209,7 @@ const PrintableReceipt = ({ img, cart, subtotal, depositTotal, total, refProp, c
                 <span>$0.00</span>
               </div>
             )}
-            <div className="flex justify-between text-xl font-bold text-gray-900 pt-2 border-t border-gray-300">
+            <div className="flex justify-between text-2xl font-extrabold text-gray-900 pt-3 border-t border-dashed border-gray-300">
               <span>Total:</span>
               <span>{formatCurrency(total)}</span>
             </div>
