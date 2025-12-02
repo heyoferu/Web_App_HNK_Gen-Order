@@ -8,7 +8,8 @@ Requisitos
 
 Instalación (fish shell example)
 ```fish
-cd /home/feru/Documents/dev/HNK_Order
+git clone https://github.com//heyoferu/Web_App_HNK_Gen-Order.git 
+cd Web_App_HNK_Order
 npm install
 npm run dev
 ```
