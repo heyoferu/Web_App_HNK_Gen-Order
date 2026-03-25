@@ -18,6 +18,19 @@ const useCart = () => {
     });
   };
 
+  const handleRemoveItem = (product) => {
+    const cartKey = product.cartKey || product.sku;
+
+    setCart((prev) => {
+      const { [cartKey]: removed, ...rest } = prev;
+      return rest;
+    });
+  };
+
+  const handleClearCart = () => {
+    setCart({});
+  };
+
   const cartItemCount = useMemo(() => {
     return Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
   }, [cart]);
@@ -25,6 +38,8 @@ const useCart = () => {
   return {
     cart,
     handleUpdateCart,
+    handleRemoveItem,
+    handleClearCart,
     cartItemCount,
   };
 };

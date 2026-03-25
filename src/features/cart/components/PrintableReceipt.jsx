@@ -83,7 +83,7 @@ const PrintableReceipt = ({ cart, subtotal, depositTotal, total, refProp, charge
             )}
             {!chargeDeposit && (
               <div className="flex justify-between text-gray-400 italic text-sm">
-                <span>Envase (Intercambio):</span>
+                <span>Envase (Retornable):</span>
                 <span>$0.00</span>
               </div>
             )}

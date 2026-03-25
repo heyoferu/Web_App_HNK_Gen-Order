@@ -13,6 +13,8 @@ const CartSidebarFooter = ({
   depositTotal,
   cart,
   total,
+  availableCash,
+  setAvailableCash,
   isGeneratingImage,
   isCopyingText,
   onPrint,
@@ -22,14 +24,22 @@ const CartSidebarFooter = ({
   if (!hasItems) return null;
 
   return (
-    <div className="p-5 bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10 space-y-4">
+    <div className="p-4 sm:p-5 bg-gradient-to-b from-white to-gray-50 border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-10 space-y-4">
       <div className="grid grid-cols-2 gap-3">
-        <DepositToggle chargeDeposit={chargeDeposit} onChange={setChargeDeposit} />
         <PricesToggle showPrices={showPrices} onChange={setShowPrices} />
+        <DepositToggle chargeDeposit={chargeDeposit} onChange={setChargeDeposit} disabled={!showPrices} />
       </div>
 
       {showPrices && (
-        <CartSummary subtotal={subtotal} chargeDeposit={chargeDeposit} depositTotal={depositTotal} cart={cart} total={total} />
+        <CartSummary
+          subtotal={subtotal}
+          chargeDeposit={chargeDeposit}
+          depositTotal={depositTotal}
+          cart={cart}
+          total={total}
+          availableCash={availableCash}
+          setAvailableCash={setAvailableCash}
+        />
       )}
 
       <div className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">Exportar y compartir</div>
@@ -40,7 +50,6 @@ const CartSidebarFooter = ({
         onPrint={onPrint}
         onDownloadImage={onDownloadImage}
         onCopyText={onCopyText}
-        showPrices={showPrices}
       />
     </div>
   );

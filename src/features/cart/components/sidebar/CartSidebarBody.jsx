@@ -1,7 +1,7 @@
 import CartEmptyState from './CartEmptyState';
 import CartItemCard from './CartItemCard';
 
-const CartSidebarBody = ({ cart, showPrices, onUpdateCart, onClose }) => {
+const CartSidebarBody = ({ cart, showPrices, onUpdateCart, onRemoveItem, onClose }) => {
   const items = Object.values(cart);
 
   return (
@@ -10,7 +10,13 @@ const CartSidebarBody = ({ cart, showPrices, onUpdateCart, onClose }) => {
         <CartEmptyState onClose={onClose} />
       ) : (
         items.map((item) => (
-          <CartItemCard key={item.product.sku} item={item} showPrices={showPrices} onUpdateCart={onUpdateCart} />
+          <CartItemCard
+            key={item.product.sku}
+            item={item}
+            showPrices={showPrices}
+            onUpdateCart={onUpdateCart}
+            onRemoveItem={onRemoveItem}
+          />
         ))
       )}
     </div>

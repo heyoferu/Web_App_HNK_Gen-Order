@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { SlidersHorizontal } from 'lucide-react';
 import { AppHeader, FiltersSidebar, ProductGrid } from './features/catalog/components';
 import { PIECE_PRODUCTS, PRODUCTS, PROMO_PRODUCTS } from './features/catalog/data';
 import { useCatalogFilters } from './features/catalog/hooks';
@@ -11,7 +12,7 @@ const CATALOG_PRODUCTS = [...PRODUCTS, ...PIECE_PRODUCTS, ...PROMO_PRODUCTS];
 export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
-  const { cart, handleUpdateCart, cartItemCount } = useCart();
+  const { cart, handleUpdateCart, handleRemoveItem, handleClearCart, cartItemCount } = useCart();
   const {
     searchTerm,
     setSearchTerm,
@@ -125,15 +126,28 @@ export default function App() {
       <div className="fixed bottom-6 left-4 z-20 lg:hidden print:hidden">
         <button
           onClick={() => setIsMobileFiltersOpen(true)}
-          className="max-w-[74vw] px-4 py-2 rounded-xl bg-white border border-gray-200 shadow-lg text-sm font-semibold text-gray-700 truncate"
+          className="px-4 py-3 rounded-2xl bg-white border border-gray-200 shadow-lg text-left text-gray-700"
         >
-          {selectedType} • {selectedBrand || 'Marca'} • {selectedPresentation ? (presentationLabelMap[selectedPresentation] || selectedPresentation) : 'Presentacion'}
+          <div className="flex items-center gap-2 text-sm font-semibold">
+            <SlidersHorizontal size={16} />
+            Filtros
+          </div>
+          <div className="text-[11px] text-gray-500 mt-0.5 max-w-[42vw] truncate">
+            {selectedType} • {selectedBrand || 'Marca'} • {selectedPresentation ? (presentationLabelMap[selectedPresentation] || selectedPresentation) : 'Presentacion'}
+          </div>
         </button>
       </div>
 
       <MobileCartFab cartItemCount={cartItemCount} onOpenCart={() => setIsCartOpen(true)} />
 
-      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} cart={cart} onUpdateCart={handleUpdateCart} />
+      <CartSidebar
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cart={cart}
+        onUpdateCart={handleUpdateCart}
+        onRemoveItem={handleRemoveItem}
+        onClearCart={handleClearCart}
+      />
     </div>
   );
 }

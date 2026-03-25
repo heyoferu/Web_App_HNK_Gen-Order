@@ -15,19 +15,20 @@ const buildOrderText = ({ cart, showPrices, subtotal, depositTotal, total, charg
   if (showPrices) {
     lines.push('');
     lines.push(`Subtotal: ${formatCurrency(subtotal)}`);
-    lines.push(`Envase: ${chargeDeposit ? formatCurrency(depositTotal) : '$0.00 (Intercambio)'}`);
+    lines.push(`Envase: ${chargeDeposit ? formatCurrency(depositTotal) : '$0.00 (Retornable)'}`);
     lines.push(`TOTAL: ${formatCurrency(total)}`);
   }
 
   return lines.join('\n');
 };
 
-const CartSidebar = ({ cart, onUpdateCart, isOpen, onClose }) => {
+const CartSidebar = ({ cart, onUpdateCart, onRemoveItem, onClearCart, isOpen, onClose }) => {
   const receiptRef = useRef(null);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [isCopyingText, setIsCopyingText] = useState(false);
   const [chargeDeposit, setChargeDeposit] = useState(false);
   const [showPrices, setShowPrices] = useState(true);
+  const [availableCash, setAvailableCash] = useState('');
 
   const subtotal = useMemo(() => {
     return Object.values(cart).reduce((sum, item) => sum + getProductUnitPrice(item.product) * item.quantity, 0);
@@ -40,6 +41,20 @@ const CartSidebar = ({ cart, onUpdateCart, isOpen, onClose }) => {
 
   const total = subtotal + depositTotal;
   const itemCount = Object.values(cart).reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleTogglePrices = (enabled) => {
+    setShowPrices(enabled);
+    if (!enabled) {
+      setChargeDeposit(false);
+    }
+  };
+
+  const handleClearCartClick = () => {
+    if (Object.values(cart).length === 0) return;
+    if (window.confirm('¿Deseas eliminar todos los productos del carrito?')) {
+      onClearCart();
+    }
+  };
 
   const handleCopyText = async () => {
     const text = buildOrderText({ cart, showPrices, subtotal, depositTotal, total, chargeDeposit });
@@ -129,20 +144,22 @@ const CartSidebar = ({ cart, onUpdateCart, isOpen, onClose }) => {
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 transition-opacity print:hidden" onClick={onClose} />
 
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-2xl flex flex-col animate-in slide-in-from-right duration-300 print:hidden">
-        <CartSidebarHeader itemCount={itemCount} onClose={onClose} />
+        <CartSidebarHeader itemCount={itemCount} onClose={onClose} onClearCart={handleClearCartClick} />
 
-        <CartSidebarBody cart={cart} showPrices={showPrices} onUpdateCart={onUpdateCart} onClose={onClose} />
+        <CartSidebarBody cart={cart} showPrices={showPrices} onUpdateCart={onUpdateCart} onRemoveItem={onRemoveItem} onClose={onClose} />
 
         <CartSidebarFooter
           hasItems={Object.values(cart).length > 0}
           chargeDeposit={chargeDeposit}
           setChargeDeposit={setChargeDeposit}
           showPrices={showPrices}
-          setShowPrices={setShowPrices}
+          setShowPrices={handleTogglePrices}
           subtotal={subtotal}
           depositTotal={depositTotal}
           cart={cart}
           total={total}
+          availableCash={availableCash}
+          setAvailableCash={setAvailableCash}
           isGeneratingImage={isGeneratingImage}
           isCopyingText={isCopyingText}
           onPrint={handlePrint}

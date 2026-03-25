@@ -1,7 +1,7 @@
 import { Beer, Minus, Plus, Trash2 } from 'lucide-react';
 import { formatCurrency, getImagePath, getProductDiscountPercent, getProductUnitPrice, hasProductDiscount } from '../../../../shared/utils';
 
-const CartItemCard = ({ item, showPrices, onUpdateCart }) => {
+const CartItemCard = ({ item, showPrices, onUpdateCart, onRemoveItem }) => {
   const unitPrice = getProductUnitPrice(item.product);
   const hasDiscount = hasProductDiscount(item.product);
   const discountPercent = getProductDiscountPercent(item.product);
@@ -40,7 +40,7 @@ const CartItemCard = ({ item, showPrices, onUpdateCart }) => {
               onClick={() => onUpdateCart(item.product, item.quantity - 1)}
               className="text-gray-500 hover:text-red-500 transition-colors"
             >
-              {item.quantity === 1 ? <Trash2 size={14} /> : <Minus size={14} />}
+              <Minus size={14} />
             </button>
 
             <span className="text-sm font-semibold w-4 text-center">{item.quantity}</span>
@@ -50,6 +50,14 @@ const CartItemCard = ({ item, showPrices, onUpdateCart }) => {
               className="text-gray-500 hover:text-green-600 transition-colors"
             >
               <Plus size={14} />
+            </button>
+
+            <button
+              onClick={() => onRemoveItem(item.product)}
+              className="text-gray-500 hover:text-red-600 transition-colors"
+              title="Eliminar item"
+            >
+              <Trash2 size={14} />
             </button>
           </div>
         </div>
