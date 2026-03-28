@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Minus, Plus } from 'lucide-react';
 import { formatCurrency, getProductDiscountAmount, getProductDiscountPercent, getProductUnitPrice, hasProductDiscount } from '../../../shared/utils';
 import ProductImage from './ProductImage';
@@ -8,6 +9,16 @@ const ProductCard = ({ product, cartQuantity, onUpdateCart }) => {
   const hasDiscount = hasProductDiscount(product);
   const discountAmount = getProductDiscountAmount(product);
   const discountPercent = getProductDiscountPercent(product);
+  const [quantityInput, setQuantityInput] = useState(String(cartQuantity));
+
+  useEffect(() => {
+    setQuantityInput(String(cartQuantity));
+  }, [cartQuantity]);
+
+  const handleCommitQuantity = () => {
+    const parsed = Number.parseInt(quantityInput || '0', 10);
+    onUpdateCart(product, Number.isNaN(parsed) ? 0 : Math.max(0, parsed));
+  };
 
   return (
     <div
@@ -62,9 +73,19 @@ const ProductCard = ({ product, cartQuantity, onUpdateCart }) => {
               <Minus size={18} strokeWidth={2.5} />
             </button>
 
-            <span className={`font-semibold text-lg w-12 text-center ${cartQuantity > 0 ? 'text-green-800' : 'text-gray-400'}`}>
-              {cartQuantity}
-            </span>
+            <input
+              type="number"
+              min="0"
+              value={quantityInput}
+              onChange={(e) => setQuantityInput(e.target.value)}
+              onBlur={handleCommitQuantity}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.currentTarget.blur();
+                }
+              }}
+              className={`font-semibold text-lg w-12 text-center bg-transparent outline-none border-0 p-0 ${cartQuantity > 0 ? 'text-green-800' : 'text-gray-400'}`}
+            />
 
             <button
               onClick={() => onUpdateCart(product, cartQuantity + 1)}
