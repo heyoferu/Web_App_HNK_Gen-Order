@@ -94,11 +94,22 @@ const CartSidebar = ({ cart, onUpdateCart, onRemoveItem, onClearCart, isOpen, on
     setIsGeneratingImage(true);
     const element = receiptRef.current;
 
+    const prevStyles = {
+      position: element.style.position,
+      top: element.style.top,
+      left: element.style.left,
+      zIndex: element.style.zIndex,
+      width: element.style.width,
+      maxWidth: element.style.maxWidth,
+    };
+
     element.classList.remove('hidden');
     element.style.position = 'absolute';
     element.style.top = '0';
     element.style.left = '0';
     element.style.zIndex = '-1';
+    element.style.width = '960px';
+    element.style.maxWidth = '960px';
 
     try {
       const canvas = await window.html2canvas(element, {
@@ -107,6 +118,8 @@ const CartSidebar = ({ cart, onUpdateCart, onRemoveItem, onClearCart, isOpen, on
         logging: false,
         useCORS: true,
         imageTimeout: 15000,
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight,
       });
 
       const link = document.createElement('a');
@@ -119,10 +132,12 @@ const CartSidebar = ({ cart, onUpdateCart, onRemoveItem, onClearCart, isOpen, on
       alert('Hubo un error al generar la imagen.');
     } finally {
       element.classList.add('hidden');
-      element.style.position = '';
-      element.style.top = '';
-      element.style.left = '';
-      element.style.zIndex = '';
+      element.style.position = prevStyles.position;
+      element.style.top = prevStyles.top;
+      element.style.left = prevStyles.left;
+      element.style.zIndex = prevStyles.zIndex;
+      element.style.width = prevStyles.width;
+      element.style.maxWidth = prevStyles.maxWidth;
       setIsGeneratingImage(false);
     }
   };

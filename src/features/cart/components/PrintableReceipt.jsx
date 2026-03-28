@@ -45,6 +45,10 @@ const PrintableReceipt = ({ cart, subtotal, depositTotal, total, refProp, charge
                   />
                 </td>
                 <td className="py-3 px-3 align-middle">
+                  <span className="mb-1 inline-block text-[11px] font-semibold text-rose-700 bg-rose-50 border border-rose-300 px-2 py-0.5 rounded-full">
+                    {product.presentationLabel || product.presentation}
+                  </span>
+                  <br />
                   <span className="font-semibold text-gray-800 text-lg leading-snug">{product.name}</span>
                   <br />
                   <span className="text-xs text-gray-500">SKU: {product.sku}</span>
