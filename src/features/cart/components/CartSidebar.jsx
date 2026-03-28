@@ -6,17 +6,28 @@ import CartSidebarFooter from './sidebar/CartSidebarFooter';
 import CartSidebarHeader from './sidebar/CartSidebarHeader';
 
 const buildOrderText = ({ cart, showPrices, subtotal, depositTotal, total, chargeDeposit }) => {
-  const lines = [showPrices ? 'PEDIDO HNKGEN' : 'LISTA DE SURTIDO', ''];
+  const lines = [showPrices ? 'HNKGEN | PEDIDO' : 'HNKGEN | LISTA DE SURTIDO', ''];
 
   Object.values(cart).forEach((item) => {
-    lines.push(`- (${item.quantity}) ${item.product.name} | SKU: ${item.product.sku}`);
+    lines.push(`${item.product.name}`);
+    lines.push(`   Presentacion: ${item.product.presentationLabel || item.product.presentation}`);
+    lines.push(`   Cantidad: ${item.quantity}`);
+
+    if (showPrices) {
+      const unitPrice = getProductUnitPrice(item.product);
+      lines.push(`   Unitario: ${formatCurrency(unitPrice)}`);
+      lines.push(`   Importe: ${formatCurrency(unitPrice * item.quantity)}`);
+    }
+
+    lines.push('');
   });
 
   if (showPrices) {
-    lines.push('');
+    lines.push('------------------------------');
     lines.push(`Subtotal: ${formatCurrency(subtotal)}`);
     lines.push(`Envase: ${chargeDeposit ? formatCurrency(depositTotal) : '$0.00 (Retornable)'}`);
     lines.push(`TOTAL: ${formatCurrency(total)}`);
+    lines.push('------------------------------');
   }
 
   return lines.join('\n');
