@@ -58,7 +58,11 @@ const PrintableReceipt = ({ cart, subtotal, depositTotal, total, refProp, charge
                 {showPrices && (
                   <td className="py-3 px-3 text-right text-gray-600 align-middle">
                     {formatCurrency(unitPrice)}
-                    {hasDiscount && <span className="block text-[11px] text-gray-400 line-through">{formatCurrency(product.price)}</span>}
+                    {hasDiscount && (
+                      <del className="block text-[11px] text-gray-500 decoration-2 decoration-gray-500">
+                        {formatCurrency(product.price)}
+                      </del>
+                    )}
                   </td>
                 )}
                 {showPrices && (
